@@ -7,8 +7,6 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import { v2 as cloudinary } from "cloudinary";
-import vaultRoute from "./api/vault.js";
-import songsRoute from "./api/songs.js";
 
 dotenv.config();
 
@@ -17,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // =======================================
-// ☁️ Cloudinary Config
+// ☁️ Cloudinary Config (Global)
 // =======================================
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -40,8 +38,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// ✅ Allowed Google Account(s)
-const ALLOWED_EMAILS = ["hiiyogita11@gmail.com","policeofficers100@gmail.com"]; // Only this user allowed
+// ✅ Only allowed Google accounts
+const ALLOWED_EMAILS = ["hiiyogita11@gmail.com", "policeofficers100@gmail.com"];
 
 // =======================================
 // 🔑 Google OAuth Setup
@@ -93,7 +91,7 @@ app.get(
   (req, res) => {
     if (req.user && ALLOWED_EMAILS.includes(req.user.emails[0].value)) {
       console.log("✅ Login success:", req.user.emails[0].value);
-      res.redirect("/indax.html"); // redirect to your main page
+      res.redirect("/indax.html");
     } else {
       console.log("🚫 Login blocked");
       req.logout(() => res.redirect("/denied.html"));
@@ -106,36 +104,90 @@ app.get("/logout", (req, res) => {
 });
 
 // =======================================
-// 🌐 Static File Serving
+// 🌐 Static Files
 // =======================================
 app.use(express.static(path.join(__dirname, "public")));
 
 // =======================================
-// ☁️ API Routes
+// 🎧 /api/songs Endpoint (Merged)
 // =======================================
-app.use("/api/vault", vaultRoute);
-app.use("/api/songs", songsRoute);
+app.get("/api/songs", async (req, res) => {
+  console.log("🎧 GET /api/songs request received");
+
+  try {
+    const result = await cloudinary.search
+      .expression("(folder:song AND (resource_type:raw OR resource_type:video))")
+      .sort_by("created_at", "desc")
+      .max_results(50)
+      .execute();
+
+    const songs = result.resources.map((r) => ({
+      url: r.secure_url,
+      name: r.public_id.split("/").pop(),
+    }));
+
+    console.log(`✅ Found ${songs.length} songs`);
+    res.status(200).json({ songs });
+  } catch (err) {
+    console.error("❌ Error fetching songs:", err);
+    res.status(500).json({ error: "Failed to fetch songs", details: err.message });
+  }
+});
+
+// =======================================
+// 📸 /api/vault Endpoint (Merged)
+// =======================================
+app.get("/api/vault", async (req, res) => {
+  console.log("📸 GET /api/vault request received");
+  try {
+    const [images, videos, songs] = await Promise.all([
+      cloudinary.search
+        .expression("folder:aif AND resource_type:image")
+        .sort_by("created_at", "desc")
+        .max_results(50)
+        .execute(),
+      cloudinary.search
+        .expression("folder:aif AND resource_type:video")
+        .sort_by("created_at", "desc")
+        .max_results(30)
+        .execute(),
+      cloudinary.search
+        .expression("folder:song AND resource_type:raw")
+        .sort_by("created_at", "desc")
+        .max_results(50)
+        .execute(),
+    ]);
+
+    res.status(200).json({
+      images: images.resources.map((r) => r.secure_url),
+      videos: videos.resources.map((r) => r.secure_url),
+      songs: songs.resources.map((r) => ({
+        url: r.secure_url,
+        name: r.public_id.split("/").pop(),
+      })),
+    });
+  } catch (err) {
+    console.error("❌ Cloudinary fetch failed:", err);
+    res.status(500).json({ error: "Failed to fetch from Cloudinary", details: err.message });
+  }
+});
 
 // =======================================
 // 🏠 Page Routes
 // =======================================
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "home.html"));
-});
-
-app.get("/index.html", ensureAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
-app.get("/denied.html", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "denied.html"));
-});
+app.get("/", (req, res) => res.sendFile(path.join(__dirname, "public", "home.html")));
+app.get("/indax.html", ensureAuth, (req, res) =>
+  res.sendFile(path.join(__dirname, "public", "indax.html"))
+);
+app.get("/denied.html", (req, res) =>
+  res.sendFile(path.join(__dirname, "public", "denied.html"))
+);
 
 // =======================================
-// 🚀 Start Server (for local only)
+// 🚀 Start Server (Local Only)
 // =======================================
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 
-// Export for Vercel
+// ✅ Export for Vercel
 export default app;
