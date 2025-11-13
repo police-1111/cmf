@@ -1,0 +1,340 @@
+/* 🌸 General Page Styling */
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+  scroll-behavior: smooth;
+}
+
+/* 💌 Card Container */
+.card {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 50px 60px;
+  border-radius: 25px;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  animation: fadeIn 1.8s ease;
+  position: relative;
+  z-index: 3;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ✨ Headings & Text */
+h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  font-weight: 400;
+}
+h2 {
+  font-weight: 700;
+  margin-top: 20px;
+}
+.signature {
+  margin-top: 15px;
+  font-style: italic;
+  color: #fff8f8;
+  font-size: 1em;
+}
+
+/* 💕 Buttons */
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 25px;
+  position: relative;
+  height: auto;
+}
+
+button {
+  font-size: 1.1em;
+  border: none;
+  outline: none;
+  padding: 12px 25px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+  position: relative;
+  background-color: #fff;
+  color: #ff4b6e;
+}
+button:hover {
+  transform: scale(1.1);
+  background-color: #ff4b6e;
+  color: #fff;
+}
+
+#yes, #date, #vault, #songs {
+  background-color: #fff;
+  color: #ff4b6e;
+}
+#no {
+  background-color: #ff4b6e;
+  color: #fff;
+}
+#no:hover, #yes:hover, #date:hover, #vault:hover, #songs:hover {
+  background-color: #ff4b6e;
+  color: #fff;
+}
+
+/* 💗 Messages */
+.love-message,
+.broken-message {
+  display: none;
+  font-size: 1.4em;
+  margin-top: 25px;
+  animation: fadeIn 2s forwards;
+  line-height: 1.5;
+}
+.broken-message { color: #ff4b6e; }
+
+/* ❤️ Background Image */
+.love-image {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  opacity: 0;
+  z-index: 1;
+  filter: brightness(0.7) blur(3px);
+  transition: opacity 1.5s ease, transform 8s ease;
+}
+.love-image.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* 💞 Floating Hearts */
+.heart {
+  position: fixed;
+  color: #ffdde1;
+  font-size: 24px;
+  animation: floatUp 6s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+}
+
+/* 💔 Broken Hearts */
+.broken-heart {
+  position: fixed;
+  color: #ff4b6e;
+  animation: floatDown 3s ease-in forwards;
+  pointer-events: none;
+  z-index: 1;
+}
+@keyframes floatDown {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(180deg) scale(0.8); opacity: 0; }
+}
+
+/* 💬 Floating Text */
+.floating-text {
+  position: fixed;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2em;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0 0 20px #ffbfd1;
+  opacity: 0;
+  animation: floatNames 5s ease forwards;
+  z-index: 6;
+}
+@keyframes floatNames {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.9); }
+  30% { opacity: 1; }
+  100% { transform: translate(-50%, -200px) scale(1.2); opacity: 0; }
+}
+
+/* 🌟 Fade-in Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* 🔐 Vault Section */
+.vault {
+  display: none;
+  margin-top: 25px;
+  text-align: center;
+  animation: fadeIn 1.5s ease;
+}
+.vault h2 {
+  color: #fff;
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+/* Vault grid layout */
+.vault-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+  padding: 10px;
+  justify-items: center;
+}
+
+/* Common styling for image & video thumbnails */
+.vault-images img,
+.vault-images video {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s;
+}
+.vault-images img:hover,
+.vault-images video:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(255, 75, 110, 0.4);
+}
+
+/* 🎞️ Video Container + Fullscreen Button */
+.video-container {
+  position: relative;
+  display: inline-block;
+}
+.vault-video {
+  border-radius: 15px;
+}
+.fullscreen-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 6px;
+  padding: 4px 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.fullscreen-btn:hover {
+  background: #ff4b6e;
+}
+
+/* Fullscreen modal */
+.image-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+}
+.image-modal img,
+.image-modal video {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.3);
+  animation: fadeIn 0.3s ease;
+}
+.close {
+  position: absolute;
+  top: 25px;
+  right: 40px;
+  font-size: 40px;
+  color: white;
+  cursor: pointer;
+}
+.close:hover { color: #ff9a9e; }
+
+/* 🎧 Songs Section */
+.songs {
+  display: none;
+  margin-top: 30px;
+  text-align: center;
+  animation: fadeIn 1.5s ease;
+}
+.songs h2 {
+  color: #fff;
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+#songsList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+#songPlayer {
+  margin-top: 15px;
+  width: 80%;
+  max-width: 400px;
+  border-radius: 10px;
+}
+
+/* 🎵 Song Button */
+.song-btn {
+  display: block;
+  margin: 8px auto;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ff4d79;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.song-btn:hover {
+  background-color: #ff1f5a;
+  transform: scale(1.05);
+}
+
+/* 📱 Responsive */
+@media (max-width: 600px) {
+  .buttons {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .vault-images {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  .vault-images img,
+  .vault-images video {
+    width: 120px;
+    height: 120px;
+  }
+  .fullscreen-btn {
+    bottom: 4px;
+    right: 6px;
+    font-size: 14px;
+  }
+}

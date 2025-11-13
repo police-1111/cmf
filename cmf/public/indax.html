@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="style.css">
+<title>For My Love ❤️</title>
+</head>
+<body>
+
+<!-- Background Music -->
+<audio id="bgMusic" autoplay loop>
+  <source src="bgmusic.mp3" type="audio/mp3">
+</audio>
+
+<!-- Floating Hearts -->
+<div class="hearts"></div>
+
+<!-- Background Images -->
+<img src="love.png" id="loveImage" class="love-image" alt="Love Image">
+<img src="date.jpeg" id="dateImage" class="love-image" alt="Date Image">
+<img src="reject.jpeg" id="rejectImage" class="love-image" alt="Reject Image">
+
+<div class="card">
+  <h1 class="glow">❤️ A Place Where My Memories Live ❤️</h1>
+  <h2 id="typewriter"></h2>
+
+  <p>
+    Every heartbeat whispers your name.  
+    You make my world brighter, my days softer,  
+    and my heart fuller than I ever imagined. 💖
+  </p>
+
+  <h2>Will you be mine forever? 💞</h2>
+
+  <div class="buttons">
+    <button id="yes">Yes 💕</button>
+    <button id="no">No 😜</button>
+    <button id="date">Date 💑</button>
+    <button id="vault">Personal Vault 🔐</button>
+    <button id="songs">Fav Songs 🎵</button>
+    <button id="compliment">Compliment 💌</button>
+  </div>
+
+  <p id="complimentText"></p>
+
+  <div class="love-message" id="loveMessage">
+    Yay! You just made my heart the happiest ever! 💫💗  
+    <br>Love you endlessly 😘
+  </div>
+
+  <div class="broken-message" id="brokenMessage">
+    Oh no! You broke my heart 💔  
+    <br>I hope you change your mind someday 😢
+  </div>
+
+  <!-- 💞 Vault Section -->
+  <div class="vault" id="vaultSection">
+    <h2>💞 Our Personal Vault 💞</h2>
+    <div id="vaultImages" class="vault-images">
+      <p>Loading images from cloud ☁️...</p>
+    </div>
+  </div>
+
+  <!-- 🎧 Songs Section -->
+  <div class="songs" id="songsSection">
+    <h2>🎶 My Favorite Songs 🎶</h2>
+    <div id="songsList">
+      <p>Loading songs from cloud ☁️...</p>
+    </div>
+    <audio id="songPlayer" controls style="width:100%; margin-top:10px; display:none;"></audio>
+  </div>
+
+  <!-- 🌸 Timeline -->
+  <div class="timeline" id="timelineSection">
+    <h2>🕰️ Our Journey 🕰️</h2>
+    <ul>
+      <li>🌸 5 sept — We met for the first time</li>
+      
+      <li>💍 2025 — Still together, growing stronger 💞</li>
+    </ul>
+    <p id="daysTogether"></p>
+  </div>
+
+  <!-- Fullscreen image preview -->
+  <div id="imageModal" class="image-modal">
+    <span id="closeModal" class="close">&times;</span>
+    <img id="modalImage" class="modal-content" alt="Full view">
+  </div>
+
+  <div class="signature">– Yours forever 💌</div>
+</div>
+
+<script src="script.js"></script>
+<script>// 🎵 Background music activation fix
+const bgMusic = document.getElementById("bgMusic");
+
+// Try to play on first interaction
+document.addEventListener("click", () => {
+  if (bgMusic.paused) {
+    bgMusic.play().catch(err => console.log("Autoplay blocked:", err));
+  }
+});
+</script>
+<script>
+/* 🌹 Typewriter Effect */
+const message = "Hii, This side your lover 💕";
+let i = 0;
+function typeWriter() {
+  if (i < message.length) {
+    document.getElementById("typewriter").innerHTML += message.charAt(i);
+    i++;
+    setTimeout(typeWriter, 100);
+  }
+}
+typeWriter();
+
+/* 💘 Compliment Generator */
+const compliments = [
+  "You're my favorite human 😍",
+  "You make my world brighter ☀️",
+  "You're my peace 💖",
+  "Every day with you is magic ✨",
+  "Your smile is my weakness 💞"
+];
+document.getElementById("compliment").onclick = () => {
+  document.getElementById("complimentText").innerText =
+    compliments[Math.floor(Math.random() * compliments.length)];
+};
+
+/* ⏳ Days Together Counter */
+const startDate = new Date("2023-08-15");
+const today = new Date();
+const diff = Math.floor((today - startDate) / (1000*60*60*24));
+document.getElementById("daysTogether").innerText = `still together`;
+</script>
+</body>
+</html>
